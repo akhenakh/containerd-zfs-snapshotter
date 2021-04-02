@@ -2,14 +2,16 @@ kind: pipeline
 name: default
 
 steps:
-  - name: build_zfs2
-    image: archlinux
+  - name: build_zfs_2
+    image: akhenakh/zfs-arch
     commands:
-      - pacman -Sy --noconfirm --needed git base-devel
-      - git clone https://aur.archlinux.org/yay.git
-      - cd yay
-      - makepkg -si
-      - yay -y zfs-linux
+      - pacman -Sy --noconfirm --needed go gcc
+      - go test -v 
+    when:
+      branch:
+        - main
+      event:
+        - push
 
   - name: build_zfs_08
     image: ubuntu:focal
@@ -23,3 +25,5 @@ steps:
     when:
       branch:
         - zfs-08
+      event:
+        - push
